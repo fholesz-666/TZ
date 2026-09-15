@@ -343,7 +343,6 @@ def rewrite_unmarked(
         if new_text != text:
             out[ref] = new_text
     return out, hits
-<<<<<<< HEAD
 
 
 def coverage(manifest: dict[str, Any]) -> dict[str, list[str]]:
@@ -380,5 +379,3 @@ def coverage(manifest: dict[str, Any]) -> dict[str, list[str]]:
             if hits:
                 out[ref] = sorted(set(hits))
     return out
-=======
->>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda

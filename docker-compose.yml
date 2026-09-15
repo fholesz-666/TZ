@@ -6,29 +6,18 @@ services:
       POSTGRES_USER: fve
       POSTGRES_DB: fve
     ports: ["5432:5432"]
-<<<<<<< HEAD
     volumes:
       - dbdata:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
-=======
-    volumes: ["dbdata:/var/lib/postgresql/data"]
->>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
 
   docx-engine:
     build: ./packages/docx-engine
     ports: ["8100:8100"]
-<<<<<<< HEAD
 
   web:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
-=======
-    volumes: ["./data:/data:ro"]
-
-  web:
-    build: ./apps/web
->>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
     env_file: .env
     depends_on: [db, docx-engine]
     ports: ["3000:3000"]

@@ -8,7 +8,4 @@ __pycache__/
 /out/
 .venv/
 .pytest_cache/
-<<<<<<< HEAD
 /data/storage/
-=======
->>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
