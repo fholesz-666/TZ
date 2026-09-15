@@ -12,7 +12,11 @@ Zadání a analýza jsou v projektu „Webová aplikace“ na claude.ai:
 | Část | Stav |
 |---|---|
 | Datový model projektu (JSON Schema) | hotovo — `docs/project-data.schema.json` |
+<<<<<<< HEAD
 | Databázové schéma | hotovo — `db/schema.sql` |
+=======
+| Databázové schéma (Prisma) | hotovo — `prisma/schema.prisma` |
+>>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
 | Parser šablon .docx | hotovo — `packages/docx-engine/app/parser.py` |
 | Navázání hodnot uvnitř vět | hotovo — `packages/docx-engine/app/binder.py` |
 | Opakující se bloky (stringy, kabeláž) | hotovo — `packages/docx-engine/app/sequences.py` |
@@ -20,7 +24,11 @@ Zadání a analýza jsou v projektu „Webová aplikace“ na claude.ai:
 | Pre-flight kontrola dat | hotovo — `packages/docx-engine/app/validate.py` |
 | Kontrola hotového dokumentu | hotovo — `packages/docx-engine/app/verify.py` |
 | HTTP rozhraní dokumentové služby | hotovo — `packages/docx-engine/app/main.py` |
+<<<<<<< HEAD
 | Webové rozhraní (Next.js) | běží — seznam projektů, šablony, průvodce importem |
+=======
+| Webové rozhraní (Next.js) | připraveno, obsah přijde v dalším kroku |
+>>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
 | Výkaz výměr (XLSX) | připraveno v modelu, generátor přijde |
 | Dimenzování kabeláže a jištění | chybí, přijde po výpočetní vrstvě |
 
@@ -31,6 +39,7 @@ Aplikace má tři části:
 ```
 apps/web              Next.js (PWA) + server-side API, jediné místo s tajemstvími
 packages/docx-engine  Python služba nad OOXML – import šablon a generování DOCX
+<<<<<<< HEAD
 db/schema.sql         schéma databáze (PostgreSQL)
 docs                  datový model projektu (JSON Schema)
 ```
@@ -40,6 +49,11 @@ popisují `db/schema.sql`. Prisma se neosvědčila: stahuje si nativní engine
 z vlastního serveru při každé instalaci i buildu, což je v uzavřeném
 prostředí i na serverless zbytečná závislost navíc.
 
+=======
+prisma                databázové schéma (PostgreSQL)
+```
+
+>>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
 Klíče (AI, úložiště, SMTP, databáze) jsou výhradně v proměnných prostředí
 na serveru. Frontend je nikdy nevidí a v repozitáři nejsou.
 
@@ -81,64 +95,3 @@ zastaví; projde jen s `--force`.
 nezůstala hodnota ze šablony tam, kde projekt má jinou. Čte i neoznačený text,
 protože právě tam se zapomenuté hodnoty schovávají. Citace norem se přeskakují —
 „ochrana … do 1000 V na straně AC“ není parametr střídače.
-
-## Spuštění
-
-Databáze:
-
-```bash
-createdb fve && psql -d fve -f db/schema.sql
-```
-
-Web (potřebuje běžící dokumentovou službu):
-
-```bash
-cd apps/web
-cp ../../.env.example .env      # a doplnit DATABASE_URL
-npm install
-npm run dev                     # http://localhost:3000
-```
-
-## Spuštění dokumentové služby
-
-```bash
-cd packages/docx-engine
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8100
-```
-
-Import šablony a vygenerování dokumentu z příkazové řádky:
-
-```bash
-python -m app.parser "../../data/templates/V1/D.2.2-TZ-FVE-MS Tichá.docx" manifest.json
-python -m app.render  "../../data/templates/V1/D.2.2-TZ-FVE-MS Tichá.docx" \
-                      manifest.json data.json vystup.docx
-```
-
-Testy (potřebují šablony v `data/templates/`):
-
-```bash
-cd packages/docx-engine && FVE_TEMPLATES=../../data/templates pytest -q
-```
-
-## Nasazení
-
-Kód je na GitHubu, běh aplikace ne — GitHub Pages umí jen statické stránky
-a klíče by musely být ve frontendu. Nasazuje se na:
-
-- **Vercel** — web a server-side API, nasazení při každém commitu
-- **Neon** — PostgreSQL
-- **Cloudflare R2** — šablony, podklady, vygenerované dokumenty
-
-Všechno běží i v Dockeru (`docker compose up`), takže přestěhování na vlastní
-server je otázka změny proměnných prostředí.
-
-## Rozhodnutí, která se promítla do kódu
-
-- výstup jen **DOCX**, PDF se negeneruje (odpadá konverze i deformace formátování)
-- výkaz výměr jako **XLSX** se zachovaným listem *Razítko*
-- množství ve výkazu je **text**, ne číslo — „dle trasy“ a „netýká se“ jsou platné hodnoty
-- verze projektu je **neměnný snapshot**, původní se nikdy nepřepisuje
-- ruční úprava dokumentu ve Wordu se nepřepíše — přegenerováním vznikne **nový soubor vedle**
-- LPS má **4 varianty** (není / izolovaný / neizolovaný / oddálený) a nezávisle „bude projekt LPS“
-- čísla zakázek mimo V1 se generují ve tvaru `26VI100`, `26VI101`, …

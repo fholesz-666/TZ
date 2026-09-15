@@ -13,7 +13,10 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, UploadFile
 from pydantic import BaseModel
 
+<<<<<<< HEAD
 from .binder import coverage
+=======
+>>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
 from .parser import parse_template
 from .render import render, values_from_manifest
 
@@ -34,6 +37,7 @@ async def parse(file: UploadFile) -> dict[str, Any]:
         tmp.write(await file.read())
         tmp_path = Path(tmp.name)
     try:
+<<<<<<< HEAD
         manifest = parse_template(tmp_path)
         # Průvodce importem se nemusí ptát na úseky, které umí přepsat
         # slovník sám – označíme je, ať jsou v přehledu odděleně.
@@ -44,6 +48,9 @@ async def parse(file: UploadFile) -> dict[str, Any]:
                 keys.update(covered.get(f"{occ['path']}#{occ['segment']}", []))
             var["covered_by"] = sorted(keys)
         return manifest
+=======
+        return parse_template(tmp_path)
+>>>>>>> 4983c203b5000ea7e0a7121fde63d894aa6b7dda
     finally:
         tmp_path.unlink(missing_ok=True)
 
