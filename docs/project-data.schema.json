@@ -1,0 +1,643 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fvsol.cz/schema/project-data.json",
+  "title": "Projektová data FVE",
+  "description": "Centrální datový model projektu (bod 11 zadání). Jediný zdroj pravdy; všechny dokumenty, výkaz i kontroly se odvozují odtud. Odvozené hodnoty jsou označené x-derived a nezadávají se ručně.",
+  "type": "object",
+  "required": [
+    "meta",
+    "site",
+    "pv"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "order_number": {
+          "type": "string",
+          "description": "V1 ručně, jinak generováno (Q-32)"
+        },
+        "name": {
+          "type": "string"
+        },
+        "building_name": {
+          "type": "string"
+        },
+        "plant_name": {
+          "type": "string",
+          "description": "jen V1, ručně (Q-33)"
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "DPS",
+            "DSPS"
+          ],
+          "default": "DPS"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{1,2}/\\d{4}$"
+        },
+        "revision": {
+          "type": "string",
+          "default": "Rev00"
+        },
+        "cost": {
+          "type": "string"
+        },
+        "build_start": {
+          "type": "string"
+        },
+        "build_end": {
+          "type": "string"
+        },
+        "copy_number": {
+          "type": "string",
+          "description": "číslo paré"
+        },
+        "sheet_format": {
+          "type": "string",
+          "description": "formát, např. 21xA4"
+        },
+        "scale": {
+          "type": "string",
+          "description": "měřítko"
+        },
+        "doc_code": {
+          "type": "string",
+          "description": "část dokumentace"
+        },
+        "doc_title": {
+          "type": "string",
+          "description": "název výkresu / dokumentu"
+        },
+        "doc_marking": {
+          "type": "string",
+          "description": "označení dokumentu"
+        },
+        "subject": {
+          "type": "string",
+          "description": "předmět dokumentace"
+        },
+        "revision_subject": {
+          "type": "string"
+        },
+        "revision_date": {
+          "type": "string"
+        },
+        "revision_author": {
+          "type": "string"
+        }
+      }
+    },
+    "company": {
+      "type": "object",
+      "description": "zpracovatel; konstanty se berou z profilu firmy (Q-25)",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ico": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
+    "investor": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ico": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
+    "contractor": {
+      "type": "object",
+      "description": "zhotovitel stavby",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "název zhotovitele"
+        },
+        "ico": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "string"
+        }
+      }
+    },
+    "people": {
+      "type": "object",
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "checker": {
+          "type": "string"
+        },
+        "authorizer": {
+          "type": "string"
+        }
+      }
+    },
+    "subsidy": {
+      "type": "object",
+      "description": "jen V1",
+      "properties": {
+        "fund": {
+          "type": "string"
+        },
+        "registration_number": {
+          "type": "string"
+        }
+      }
+    },
+    "site": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "object",
+          "properties": {
+            "full": {
+              "type": "string"
+            },
+            "municipality": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string"
+            }
+          }
+        },
+        "cadastre": {
+          "type": "object",
+          "properties": {
+            "area": {
+              "type": "string"
+            },
+            "parcels": {
+              "type": "string"
+            }
+          }
+        },
+        "gps": {
+          "type": "string"
+        },
+        "climate": {
+          "type": "object",
+          "properties": {
+            "snow_zone": {
+              "type": "string",
+              "default": "VII"
+            },
+            "wind_zone": {
+              "type": "string",
+              "default": "III"
+            }
+          }
+        },
+        "building": {
+          "type": "object",
+          "properties": {
+            "roof_covering": {
+              "type": "string"
+            },
+            "roof_tilt_deg": {
+              "type": "number",
+              "description": "sklon střechy — jiný údaj než sklon konstrukce (Q-17)"
+            },
+            "existing_pv": {
+              "type": "string",
+              "enum": [
+                "ANO",
+                "NE"
+              ]
+            },
+            "existing_pv_kwp": {
+              "type": "string"
+            },
+            "pv_area_m2": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "pv": {
+      "type": "object",
+      "required": [
+        "count",
+        "panel"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "zadává uživatel, AI nikdy nenavrhuje (bod 25)"
+        },
+        "panel": {
+          "type": "object",
+          "description": "reference do katalogu zařízení; parametry z datasheetu (Q-16)",
+          "properties": {
+            "manufacturer": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "wp": {
+              "type": "number"
+            },
+            "vmp": {
+              "type": "number"
+            },
+            "imp": {
+              "type": "number"
+            },
+            "voc": {
+              "type": "number"
+            },
+            "isc": {
+              "type": "number"
+            },
+            "efficiency": {
+              "type": "number"
+            },
+            "dimensions": {
+              "type": "string"
+            },
+            "area": {
+              "type": "number"
+            },
+            "beta_voc_pct_per_k": {
+              "type": "number",
+              "description": "teplotní součinitel Voc [%/K]"
+            }
+          }
+        },
+        "orientation": {
+          "type": "array",
+          "description": "Σ count musí odpovídat pv.count (pravidlo PV-03)",
+          "items": {
+            "type": "object",
+            "required": [
+              "azimuth",
+              "count"
+            ],
+            "properties": {
+              "azimuth": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 360
+              },
+              "direction": {
+                "type": "string",
+                "x-derived": "azimut → 8 světových stran (Q-08)"
+              },
+              "tilt_deg": {
+                "type": "number"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "roof": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "inverters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "examples": [
+                  "INV1"
+                ]
+              },
+              "model": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "p_ac_kw": {
+                "type": "number"
+              },
+              "mppt_count": {
+                "type": "integer"
+              },
+              "u_dc_max": {
+                "type": "number"
+              },
+              "i_mppt_max": {
+                "type": "number"
+              },
+              "p_ac_va": {
+                "type": "number",
+                "description": "max. výstupní AC výkon [VA]"
+              },
+              "i_ac_max": {
+                "type": "number",
+                "description": "max. výstupní AC proud [A]"
+              },
+              "i_dc_max": {
+                "type": "number",
+                "description": "max. vstupní DC proud [A]"
+              },
+              "p_dc_max": {
+                "type": "number",
+                "description": "max. vstupní DC výkon [W]"
+              },
+              "efficiency": {
+                "type": "number",
+                "description": "EURO účinnost [%]"
+              },
+              "dimensions": {
+                "type": "string",
+                "description": "rozměry měniče"
+              }
+            }
+          }
+        },
+        "strings": {
+          "type": "array",
+          "description": "Σ panelů musí odpovídat pv.count (PV-02)",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "panel_count"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "examples": [
+                  "1.1"
+                ]
+              },
+              "inverter": {
+                "type": "string"
+              },
+              "mppt": {
+                "type": "integer"
+              },
+              "panel_count": {
+                "type": "integer"
+              },
+              "orientation_index": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "optimizers": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string"
+            },
+            "ratio": {
+              "type": "string",
+              "enum": [
+                "1:1",
+                "1:2",
+                "1:4"
+              ],
+              "description": "volba uživatele (Q-07)"
+            },
+            "count": {
+              "type": "integer",
+              "x-derived": "Σ přes střechy ceil(panelů / kapacita) — ne z celku (Q-11)"
+            },
+            "u_off": {
+              "type": "number",
+              "description": "napětí na výstupu ve vypnutém stavu, z datasheetu (Q-05)"
+            }
+          }
+        },
+        "battery": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "model": {
+              "type": "string"
+            },
+            "capacity_kwh": {
+              "type": "number"
+            },
+            "usable_kwh": {
+              "type": "number"
+            },
+            "count": {
+              "type": "integer"
+            }
+          }
+        },
+        "safe_roof_voltage": {
+          "type": "number",
+          "description": "bezpečné napětí na střeše po vypnutí [V]",
+          "x-derived": "největší string × výstupní napětí optimizéru ve vypnutém stavu"
+        },
+        "orientation_summary": {
+          "type": "string",
+          "x-derived": "souhrn azimutů pro tabulku"
+        }
+      }
+    },
+    "energy": {
+      "type": "object",
+      "properties": {
+        "p_dc_kwp": {
+          "type": "number",
+          "x-derived": "pv.count × pv.panel.wp / 1000"
+        },
+        "p_ac_kw": {
+          "type": "number",
+          "x-derived": "Σ střídačů"
+        },
+        "specific_yield": {
+          "type": "number",
+          "description": "kWh/kWp — zadává uživatel (Q-37)"
+        },
+        "annual_yield_mwh": {
+          "type": "number",
+          "x-derived": "p_dc_kwp × specific_yield / 1000"
+        },
+        "consumption_mwh": {
+          "type": "number"
+        },
+        "self_consumption_mwh": {
+          "type": "number"
+        },
+        "surplus_use_mwh": {
+          "type": "number"
+        },
+        "annual_yield": {
+          "type": "string",
+          "description": "roční výroba, jak se píše v dokumentu"
+        }
+      }
+    },
+    "electrical": {
+      "type": "object",
+      "properties": {
+        "switchboards": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "connection_point": {
+          "type": "string",
+          "description": "mění se podle projektu (Q-31)"
+        },
+        "cables": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "grid": {
+          "type": "object",
+          "properties": {
+            "distributor": {
+              "type": "string",
+              "enum": [
+                "ČEZ Distribuce",
+                "EG.D",
+                "PREdistribuce"
+              ]
+            },
+            "contract_number": {
+              "type": "string"
+            },
+            "module_category": {
+              "type": "string",
+              "x-derived": "podle p_ac_kw: A1 < 11 kW, A2 11–100 kW"
+            },
+            "protection_settings": {
+              "type": "array",
+              "x-derived": "číselník podle distributora (Q-12)"
+            }
+          }
+        },
+        "rac": {
+          "type": "object",
+          "description": "rozvaděč AC části",
+          "properties": {
+            "spec": {
+              "type": "string",
+              "description": "specifikace rozvaděče RAC"
+            },
+            "count": {
+              "type": "integer",
+              "description": "počet rozvaděčů RAC"
+            }
+          }
+        },
+        "rdc": {
+          "type": "object",
+          "description": "rozvaděč DC části",
+          "properties": {
+            "spec": {
+              "type": "string",
+              "description": "specifikace rozvaděče RDC"
+            },
+            "count": {
+              "type": "integer",
+              "description": "počet rozvaděčů RDC"
+            }
+          }
+        }
+      }
+    },
+    "lps": {
+      "type": "object",
+      "properties": {
+        "variant": {
+          "type": "string",
+          "enum": [
+            "neni",
+            "izolovany",
+            "neizolovany",
+            "oddaleny"
+          ],
+          "description": "4 varianty (doplnění k Q-29)"
+        },
+        "has_project": {
+          "type": "boolean",
+          "description": "bude / nebude projekt LPS"
+        },
+        "class": {
+          "type": "string",
+          "enum": [
+            "I",
+            "II",
+            "III",
+            "IV"
+          ]
+        },
+        "down_conductors": {
+          "type": "integer"
+        },
+        "air_terminals": {
+          "type": "integer"
+        }
+      }
+    },
+    "construction": {
+      "type": "object",
+      "properties": {
+        "system": {
+          "type": "string"
+        },
+        "tilt_deg": {
+          "type": "number",
+          "description": "sklon konstrukce — jiný údaj než sklon střechy (Q-17)"
+        },
+        "ballast": {
+          "type": "string"
+        }
+      }
+    },
+    "fire_safety": {
+      "type": "object",
+      "properties": {
+        "penetration_ei": {
+          "type": "string",
+          "examples": [
+            "EI 30",
+            "EI 45"
+          ]
+        },
+        "tray": {
+          "type": "string"
+        }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
